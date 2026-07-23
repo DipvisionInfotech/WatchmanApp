@@ -151,10 +151,37 @@ class DashboardScreen extends StatelessWidget {
             ]),
 
             const SizedBox(height: 24),
-            _buildEmergencySection(),
+            _buildEmergencySection(context),
             const SizedBox(height: 20),
           ],
         ),
+      ),
+    );
+  }
+
+  void _triggerEmergency(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        icon: const Icon(Icons.warning_amber_rounded, color: Colors.red, size: 48),
+        title: const Text('Trigger Emergency Alert?'),
+        content: const Text('This will notify the main gate security and all society members immediately.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('CANCEL')),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('SOS Alert Sent Successfully!'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
+            child: const Text('SEND ALERT'),
+          ),
+        ],
       ),
     );
   }
@@ -243,30 +270,61 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEmergencySection() {
+  Widget _buildEmergencySection(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.red.shade50,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.red.shade200),
+        gradient: LinearGradient(
+          colors: [Colors.red.shade600, Colors.red.shade900],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.red.withOpacity(0.3),
+            blurRadius: 15,
+            spreadRadius: 2,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Column(
         children: [
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.warning, color: Colors.red),
-              SizedBox(width: 8),
-              Text('EMERGENCY SOS', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 18)),
-            ],
-          ),
+          const Icon(Icons.emergency_share, color: Colors.white, size: 40),
           const SizedBox(height: 12),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
-            child: const Text('TRIGGER ALARM'),
+          Text(
+            'EMERGENCY SOS',
+            style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              letterSpacing: 1.2,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Tap to notify security and neighbors',
+            style: TextStyle(color: Colors.white70, fontSize: 13),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () => _triggerEmergency(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.red.shade900,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              child: const Text(
+                'TRIGGER ALARM NOW',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
           ),
         ],
       ),
