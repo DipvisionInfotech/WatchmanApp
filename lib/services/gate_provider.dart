@@ -4,6 +4,10 @@ import '../models/staff.dart';
 import '../models/delivery.dart';
 import '../models/vehicle.dart';
 import '../models/notice.dart';
+import '../models/bill.dart';
+import '../models/amenity.dart';
+import '../models/pre_approval.dart';
+import '../models/complaint.dart';
 
 class GateProvider with ChangeNotifier {
   final List<Visitor> _visitors = [];
@@ -28,11 +32,46 @@ class GateProvider with ChangeNotifier {
     ),
   ];
 
+  final List<Bill> _bills = [
+    Bill(id: '1', title: 'July Maintenance', amount: 2500, dueDate: DateTime(2026, 7, 31), status: BillStatus.unpaid),
+    Bill(id: '2', title: 'Water Bill', amount: 450, dueDate: DateTime(2026, 7, 25), status: BillStatus.unpaid),
+  ];
+
+  final List<Amenity> _amenities = [
+    Amenity(id: '1', name: 'Clubhouse', description: 'Available for events', icon: Icons.meeting_room),
+    Amenity(id: '2', name: 'Swimming Pool', description: 'Open 6 AM - 10 PM', icon: Icons.pool),
+    Amenity(id: '3', name: 'Gym', description: '24/7 Access', icon: Icons.fitness_center),
+  ];
+
+  final List<PreApproval> _preApprovals = [];
+  final List<Complaint> _complaints = [];
+
   List<Visitor> get visitors => [..._visitors];
   List<Staff> get staffMembers => [..._staffMembers];
   List<Delivery> get deliveries => [..._deliveries];
   List<Vehicle> get vehicles => [..._vehicles];
   List<Notice> get notices => [..._notices];
+  List<Bill> get bills => [..._bills];
+  List<Amenity> get amenities => [..._amenities];
+  List<PreApproval> get preApprovals => [..._preApprovals];
+  List<Complaint> get complaints => [..._complaints];
+
+  double get totalDues => _bills.where((b) => b.status != BillStatus.paid).fold(0, (sum, item) => sum + item.amount);
+
+  void addBill(Bill bill) {
+    _bills.add(bill);
+    notifyListeners();
+  }
+
+  void addComplaint(Complaint complaint) {
+    _complaints.add(complaint);
+    notifyListeners();
+  }
+
+  void addPreApproval(PreApproval preApproval) {
+    _preApprovals.add(preApproval);
+    notifyListeners();
+  }
 
   void addVehicle(Vehicle vehicle) {
     _vehicles.add(vehicle);

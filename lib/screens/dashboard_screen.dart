@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../services/gate_provider.dart';
 import 'visitor_entry_screen.dart';
 import 'staff_management_screen.dart';
@@ -9,6 +10,10 @@ import 'vehicle_entry_screen.dart';
 import 'logs_screen.dart';
 import 'reports_screen.dart';
 import 'notices_screen.dart';
+import 'billing_screen.dart';
+import 'amenity_booking_screen.dart';
+import 'helpdesk_screen.dart';
+import 'pre_approval_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -17,7 +22,7 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('WATCHMAN DASHBOARD', style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 18)),
+        title: Text('SOCIETY MANAGEMENT', style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 18)),
         backgroundColor: Colors.blue.shade900,
         foregroundColor: Colors.white,
         actions: [
@@ -35,64 +40,178 @@ class DashboardScreen extends StatelessWidget {
           children: [
             _buildQuickStats(context),
             const SizedBox(height: 24),
-            Text('Gate Operations', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 16),
-            GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              children: [
-                _buildMenuCard(
-                  context,
-                  'New Visitor',
-                  Icons.person_add,
-                  Colors.orange,
-                  () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VisitorEntryScreen())),
-                ),
-                _buildMenuCard(
-                  context,
-                  'Delivery',
-                  Icons.delivery_dining,
-                  Colors.blue,
-                  () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DeliveryManagementScreen())),
-                ),
-                _buildMenuCard(
-                  context,
-                  'Vehicle Entry',
-                  Icons.directions_car,
-                  Colors.teal,
-                  () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VehicleEntryScreen())),
-                ),
-                _buildMenuCard(
-                  context,
-                  'Staff Attendance',
-                  Icons.badge,
-                  Colors.green,
-                  () => Navigator.push(context, MaterialPageRoute(builder: (context) => const StaffManagementScreen())),
-                ),
-                _buildMenuCard(
-                  context,
-                  'Activity Logs',
-                  Icons.history,
-                  Colors.purple,
-                  () => Navigator.push(context, MaterialPageRoute(builder: (context) => const LogsScreen())),
-                ),
-                _buildMenuCard(
-                  context,
-                  'Daily Reports',
-                  Icons.analytics,
-                  Colors.indigo,
-                  () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ReportsScreen())),
-                ),
-              ],
-            ),
+            
+            _buildSectionTitle('1. Smart Security & Gate'),
+            _buildFeatureGrid(context, [
+              _Feature(
+                'Pre-approval', 
+                Icons.verified_user, 
+                Colors.orange, 
+                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PreApprovalScreen()))
+              ),
+              _Feature(
+                'Visitor Entry', 
+                Icons.person_add, 
+                Colors.orange, 
+                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VisitorEntryScreen()))
+              ),
+              _Feature(
+                'Delivery', 
+                Icons.delivery_dining, 
+                Colors.orange, 
+                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const DeliveryManagementScreen()))
+              ),
+              _Feature(
+                'Safety Alerts', 
+                Icons.pets, 
+                Colors.orange, 
+                () => _showPlaceholder(context, 'Child & Pet Safety')
+              ),
+            ]),
+
+            const SizedBox(height: 24),
+            _buildSectionTitle('2. Accounting & Billing'),
+            _buildFeatureGrid(context, [
+              _Feature(
+                'Payments', 
+                Icons.account_balance_wallet, 
+                Colors.green, 
+                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const BillingScreen()))
+              ),
+              _Feature(
+                'Invoices', 
+                Icons.receipt_long, 
+                Colors.green, 
+                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const BillingScreen()))
+              ),
+              _Feature(
+                'Vendors', 
+                Icons.storefront, 
+                Colors.green, 
+                () => _showPlaceholder(context, 'Vendor Management')
+              ),
+              _Feature(
+                'Meter', 
+                Icons.electric_bolt, 
+                Colors.green, 
+                () => _showPlaceholder(context, 'Prepaid Meter')
+              ),
+            ]),
+
+            const SizedBox(height: 24),
+            _buildSectionTitle('3. Daily Help Management'),
+            _buildFeatureGrid(context, [
+              _Feature(
+                'Attendance', 
+                Icons.badge, 
+                Colors.blue, 
+                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const StaffManagementScreen()))
+              ),
+              _Feature(
+                'Help Ratings', 
+                Icons.star_half, 
+                Colors.blue, 
+                () => _showPlaceholder(context, 'Staff Ratings & Reviews')
+              ),
+              _Feature(
+                'Staff Salary', 
+                Icons.payments, 
+                Colors.blue, 
+                () => _showPlaceholder(context, 'Salary Tracking')
+              ),
+            ]),
+
+            const SizedBox(height: 24),
+            _buildSectionTitle('4. Community & Facilities'),
+            _buildFeatureGrid(context, [
+              _Feature(
+                'Helpdesk', 
+                Icons.support_agent, 
+                Colors.purple, 
+                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const HelpdeskScreen()))
+              ),
+              _Feature(
+                'Bookings', 
+                Icons.event_available, 
+                Colors.purple, 
+                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AmenityBookingScreen()))
+              ),
+              _Feature(
+                'Intercom', 
+                Icons.phone_callback, 
+                Colors.purple, 
+                () => _showPlaceholder(context, 'Secure Internet Calling')
+              ),
+              _Feature(
+                'Logs/Reports', 
+                Icons.analytics, 
+                Colors.purple, 
+                () => Navigator.push(context, MaterialPageRoute(builder: (context) => const LogsScreen()))
+              ),
+            ]),
+
             const SizedBox(height: 24),
             _buildEmergencySection(),
+            const SizedBox(height: 20),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Text(
+        title, 
+        style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue.shade900)
+      ),
+    );
+  }
+
+  Widget _buildFeatureGrid(BuildContext context, List<_Feature> features) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 16,
+        childAspectRatio: 0.85,
+      ),
+      itemCount: features.length,
+      itemBuilder: (context, index) {
+        final f = features[index];
+        return InkWell(
+          onTap: f.onTap,
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: f.color.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(f.icon, color: f.color, size: 24),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                f.title, 
+                textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(fontSize: 10, fontWeight: FontWeight.w500),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showPlaceholder(BuildContext context, String title) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('$title feature coming soon!'), duration: const Duration(seconds: 1))
     );
   }
 
@@ -119,33 +238,8 @@ class DashboardScreen extends StatelessWidget {
     return Column(
       children: [
         Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue)),
-        Text(label, style: TextStyle(color: Colors.grey.shade600)),
+        Text(label, style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
       ],
-    );
-  }
-
-  Widget _buildMenuCard(BuildContext context, String title, IconData icon, Color color, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 2, blurRadius: 5)],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              backgroundColor: color.withOpacity(0.1),
-              radius: 30,
-              child: Icon(icon, color: color, size: 30),
-            ),
-            const SizedBox(height: 12),
-            Text(title, style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
-          ],
-        ),
-      ),
     );
   }
 
@@ -178,4 +272,13 @@ class DashboardScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+class _Feature {
+  final String title;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  _Feature(this.title, this.icon, this.color, this.onTap);
 }

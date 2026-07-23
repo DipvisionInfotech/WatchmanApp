@@ -8,6 +8,8 @@ class Staff {
   final String? photoUrl;
   final bool isCheckedIn;
   final DateTime? lastCheckIn;
+  final double rating;
+  final double salary;
 
   Staff({
     required this.id,
@@ -17,5 +19,7 @@ class Staff {
     this.photoUrl,
     this.isCheckedIn = false,
     this.lastCheckIn,
+    this.rating = 4.5,
+    this.salary = 0,
   });
 }
